@@ -1,0 +1,56 @@
+<%- include('src/up') %>
+
+  <div class="container py-4">
+    <h1 class="text-center mb-4 text-white">Resultados de la Semana</h1>
+
+    <% const fechas = Object.keys(agrupadosPorDia).sort(); %>
+    <% if (fechas.length === 0) { %>
+      <div class="alert alert-info text-center">Aún no hay partidos.</div>
+    <% } %>
+
+    <% fechas.forEach(fecha => { %>
+      <div class="card mb-4 shadow">
+        <div class="card-header bg-success text-white">
+          <h4 class="mb-0">Día: <%= fecha %></h4>
+        </div>
+        <div class="card-body">
+          <% agrupadosPorDia[fecha].forEach(partido => { %>
+            <% if (partido.finished === true) { %>
+            <div class="mb-3 border-bottom pb-2">
+              <strong><%= partido.match %></strong><br>
+              Resultado: <%= partido.result.home %> - <%= partido.result.away %><br>
+              Resultado ganador: <%= partido.winner %> 
+              (<%= partido.odds[partido.winner] %>)
+            </div>
+            <% } else { %>
+            <div class="mb-3 border-bottom pb-2">
+              <strong><%= partido.match %></strong><br>
+              <i class="bi bi-clock me-2"></i> Partido pendiente
+            </div>
+            <% } %>
+          <% }) %>
+
+          <% if (cuotasDiarias[fecha]) { %>
+            <div class="alert alert-success">
+              Cuota ganadora del día: <strong><%= cuotasDiarias[fecha] %></strong>
+            </div>
+          <% } else { %>
+            <div class="alert alert-warning">
+              Cuota no disponible, hay partidos pendientes.
+            </div>
+          <% } %>
+        </div>
+      </div>
+    <% }) %>
+
+    <div class="card mt-5 shadow">
+      <div class="card-body text-center">
+        <h4 class="mb-3">Cuota ganadora semanal</h4>
+        <h2 class="text-primary">
+          <%= cuotaTotalSemana %>
+        </h2>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+/* General */
+.partido-card {
+    transition: transform 0.2s;
+    margin-bottom: 20px;
+}
+.partido-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.5);
+}
+.card-header {
+    font-weight: 600;
+}
+.badge-cuota {
+    font-size: 0.9rem;
+    padding: 5px 8px;
+}
+
+/* Combinations */
+.table-responsive {
+    margin-top: 20px;
+}
+.cuota-alta {
+    color: #dc3545;
+    font-weight: bold;
+}
+.ganadora {
+    background-color: rgba(25, 135, 84, 0.2) !important;
+    border-left: 4px solid #198754;
+}
+.resultado-final {
+    font-weight: bold;
+    color: #198754;
+}
+.info-box {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+/* Matches */
+.badge-1 {
+    background-color: #0d6efd;
+}
+.badge-X {
+    background-color: #6c757d;
+}
+.badge-2 {
+    background-color: #dc3545;
+}
+.progress {
+    height: 25px;
+    margin-bottom: 10px;
+}
+.progress-bar-1 {
+    background-color: #0d6efd;
+}
+.progress-bar-X {
+    background-color: #6c757d;
+}
+.progress-bar-2 {
+    background-color: #dc3545;
+}
+.table-match {
+    font-size: 0.9rem;
+}
+.table-match th {
+    white-space: nowrap;
+}
+.team-logo {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    margin-right: 8px;
+}

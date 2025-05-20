@@ -1,0 +1,61 @@
+<%- include('src/up') %>
+
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="h3 mb-0 text-white"><i class="bi bi-calendar-week me-2"></i><%= pageTitle.split('|')[1] %></h1>
+      <span class="badge bg-success"><i class="bi bi-info-circle me-1"></i> Total semanas: <%= semanas.length %></span>
+    </div>
+    
+    <% if (semanas.length === 0) { %>
+    <div class="alert alert-warning">
+      No hay partidos disponibles para mostrar.
+    </div>
+    <% } %>
+    
+    <div class="row g-4">
+      <% semanas.forEach(semana => { %>
+      <div class="col-md-6 col-lg-4">
+        <div class="card partido-card h-100">
+          <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <h2 class="h5 mb-0"> <%= semana.codigoSemana.split('-W')[0]%> Semana <%= semana.codigoSemana.split('-W')[1] %></h2>
+            <span class="badge bg-light text-dark"><%= semana.resumen.partidosFinalizados %> / <%= semana.resumen.totalPartidos %> finalizados</span>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">
+              <i class="bi bi-calendar-range me-1"></i> 
+              <%= semana.fechaInicio %> al <%= semana.fechaFin %>
+            </p>
+            
+            <div class="mb-3">
+              <h3 class="h6">Distribución semanal de resultados:</h3>
+              <div class="progress">
+                <div class="progress-bar progress-bar-1" role="progressbar" style="width: <%= semana.resumen.porcentajeAciertos['1'] %>%" 
+                  aria-valuenow="<%= semana.resumen.porcentajeAciertos['1'] %>" aria-valuemin="0" aria-valuemax="100">
+                  1:  <%= semana.resumen.porcentajeAciertos['1'] %>%
+                </div>
+                <div class="progress-bar progress-bar-X" role="progressbar" style="width: <%= semana.resumen.porcentajeAciertos['X'] %>%" 
+                  aria-valuenow="<%= semana.resumen.porcentajeAciertos['X'] %>" aria-valuemin="0" aria-valuemax="100">
+                  X:  <%= semana.resumen.porcentajeAciertos['X'] %>%
+                </div>
+                <div class="progress-bar progress-bar-2" role="progressbar" style="width: <%= semana.resumen.porcentajeAciertos['2'] %>%" 
+                  aria-valuenow="<%= semana.resumen.porcentajeAciertos['2'] %>" aria-valuemin="0" aria-valuemax="100">
+                  2:  <%= semana.resumen.porcentajeAciertos['2'] %>%
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer bg-transparent">
+            <a href="/matches/detalle?semana=<%= semana.codigoSemana %>" class="btn btn-success btn-sm w-100">
+              <i class="bi bi-eye me-1"></i> Ver partidos
+            </a>
+          </div>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

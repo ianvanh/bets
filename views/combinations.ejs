@@ -1,0 +1,170 @@
+<%- include('src/up') %>
+
+  <div class="container py-4">
+    <div class="card" style="background-color: #0a0a0a; border: none;">
+      <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+        <h1 class="h4 mb-0"><i class="bi bi-grid-3x3-gap me-2"></i><%= pageTitle.split('|')[1] %></h1>
+        <span class="badge bg-light text-dark"><i class="bi bi-calendar me-1"></i> <%= new Date().toLocaleDateString() %></span>
+      </div>
+            
+      <div class="card-body">
+        <!-- Información general -->
+        <div class="info-box">
+          <h2 class="h5"><i class="bi bi-info-circle me-2"></i>Información</h2>
+          <p class="mb-0">Esta página muestra las 27 combinaciones posibles de resultados (1, X, 2) para los 3 partidos seleccionados, con sus respectivas cuotas multiplicadas.</p>
+        </div>
+
+        <!-- Tarjetas de partidos -->
+        <h2 class="h5 mb-3 text-white"><i class="bi bi-joystick me-2"></i>Partidos seleccionados</h2>
+        <div class="row g-3 mb-4">
+          <% partidos.forEach((partido, index) => { %>
+          <div class="col-md-4">
+            <div class="card partido-card h-100 <%= partido.finished ? 'border-success' : 'border-secondary' %>">
+              <div class="card-header <%= partido.finished ? 'bg-success' : 'bg-secondary' %> text-white d-flex justify-content-between align-items-center">
+                <span>Partido <%= index + 1 %></span>
+                <% if (partido.finished) { %>
+                <span class="badge bg-white text-success">Finalizado</span>
+                <% } else { %>
+                <span class="badge bg-white text-primary">Pendiente</span>
+                <% } %>
+              </div>
+              <div class="card-body">
+                <h4 class="h5 card-title text-center mb-3"><%= partido.equipos %></h4>
+                <div class="d-flex justify-content-between mb-3">
+                  <span class="badge <%= partido.finished && partido.resultadoFinal === '1' ? 'bg-success' : 'bg-secondary' %> badge-cuota">
+                    1: <%= partido.cuotaLocal %>
+                  </span>
+                  <span class="badge <%= partido.finished && partido.resultadoFinal === 'X' ? 'bg-success' : 'bg-secondary' %> badge-cuota">
+                    X: <%= partido.cuotaEmpate %>
+                  </span>
+                  <span class="badge <%= partido.finished && partido.resultadoFinal === '2' ? 'bg-success' : 'bg-secondary' %> badge-cuota">
+                    2: <%= partido.cuotaVisitante %>
+                  </span>
+                </div>
+                <% if (partido.finished) { %>
+                <div class="alert alert-success mb-0 p-2 text-center">
+                  <i class="bi bi-check-circle-fill me-2"></i> 
+                  <strong>Resultado:</strong> 
+                  <%= partido.resultadoFinal === '1' ? partido.local : 
+                      partido.resultadoFinal === 'X' ? 'Empate' : 
+                      partido.visitante %>
+                </div>
+                <% } else { %>
+                <div class="alert alert-secondary mb-0 p-2 text-center">
+                  <i class="bi bi-clock me-2"></i> Partido pendiente
+                </div>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+        </div>
+        
+        <!-- Tabla de combinaciones -->
+        <h2 class="h5 mb-3 text-white"><i class="bi bi-table me-2"></i>Combinaciones posibles</h2>
+        <% if (todosFinalizados) { %>
+        <div class="alert alert-success d-flex align-items-center">
+          <i class="bi bi-check-circle-fill me-2 fs-4"></i>
+          <div>Todos los partidos han finalizado. La combinación ganadora está resaltada en verde.</div>
+        </div>
+        <% } else { %>
+        <div class="alert alert-warning d-flex align-items-center">
+          <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+          <div>Algunos partidos están pendientes. Los resultados finales se mostrarán cuando todos los partidos hayan finalizado.</div>
+        </div>
+        <% } %>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col" class="text-center">#</th>
+                <th scope="col">Combinación</th>
+                <th scope="col">Descripción</th>
+                <th scope="col" class="text-end">Cuota</th>
+                <% if (todosFinalizados) { %>
+                <th scope="col" class="text-center">Resultado</th>
+                <% } %>
+              </tr>
+            </thead>
+            <tbody>
+              <% combinaciones.forEach((combi, index) => { %>
+              <tr class="<%= combi.esGanadora ? 'ganadora' : '' %>">
+                <th scope="row" class="text-center"><%= index + 1 %></th>
+                <td><code class="fs-5"><%= combi.combinacion %></code></td>
+                <td>
+                  <% combi.descripcion.split(' | ').forEach(desc => { %>
+                  <div class="small"><%= desc %></div>
+                  <% }); %>
+                </td>
+                <td class="text-end <%= combi.cuota > 50 ? 'cuota-alta' : '' %>">
+                  <span class="badge <%= combi.cuota > 50 ? 'bg-danger' : 'bg-primary' %>"><%= combi.cuota %></span>
+                </td>
+                <% if (todosFinalizados) { %>
+                <td class="text-center">
+                  <% if (combi.esGanadora) { %>
+                  <span class="badge bg-success">
+                    <i class="bi bi-trophy-fill me-1"></i> Ganadora
+                  </span>
+                  <% } else { %>
+                  <span class="badge bg-secondary">
+                    <i class="bi bi-x-circle me-1"></i> No
+                  </span>
+                  <% } %>
+                </td>
+                <% } %>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Resumen estadístico -->
+          <%
+          const indiceGanador = combinaciones.findIndex(item => item.esGanadora === true);
+          const cuotaGanadora = combinaciones[indiceGanador]?.cuota;
+          %>
+        <div class="row mt-4">
+          <div class="col-md-6">
+            <div class="card shadow-sm">
+              <div class="card-header bg-info text-white">
+                <h3 class="h6 mb-0"><i class="bi bi-graph-up me-2"></i>Resumen</h3>
+              </div>
+              <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Total combinaciones:</span>
+                  <strong>27</strong>
+                </div>
+                <% if (todosFinalizados) { %>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Combinación ganadora:</span>
+                  <strong class="text-success"># <%= indiceGanador + 1%></strong>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Cuota:</span>
+                  <strong class="text-success"><%= cuotaGanadora%></strong>
+                </div>
+                <% } %>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Cuota más alta:</span>
+                  <strong class="text-danger"><%= combinaciones[0].cuota %></strong>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span>Cuota más baja:</span>
+                  <strong class="text-danger"><%= combinaciones[26].cuota %></strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+      <div class="card-footer text-muted small d-flex justify-content-between">
+        <span><i class="bi bi-info-circle me-1"></i> Las cuotas mostradas son multiplicadas para cada combinación.</span>
+        <span>Sistema de apuestas 1X2</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

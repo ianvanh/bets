@@ -1,0 +1,96 @@
+<%- include('src/up') %>
+ 
+  <div class="container py-4">
+    <div class="card" style="background-color: <%= fondo %>; border: none;">
+      <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+        <h1 class="h4 mb-0"><i class="bi bi-grid-3x3-gap me-2"></i><%= pageTitle.split('|')[1] %></h1>
+        <span class="badge bg-light text-dark"><i class="bi bi-calendar me-1"></i> <%= today %></span>
+      </div>
+      
+      <div class="card-body">
+      <% if (matchesToday.length === 0) { %>
+        <!-- Información general -->
+        <div class="text-center mt-4">
+          <img src="/img/waiting.gif" style="width: 90%;">
+          <p class="text-muted">Estamos calculando las mejores combinaciones, regresa más tarde.</p>
+        </div>
+      <% } else { %>
+        <!-- Tarjetas de partidos -->
+        <h2 class="h5 mb-3 text-white"><i class="bi bi-joystick me-2"></i>Partidos seleccionados</h2>
+        <div class="row g-3 mb-4">
+          <% matchesToday.forEach((match, index) => { %>
+          <% if (match.match) { %>
+          <div class="col-md-4">
+            <div class="card partido-card h-100 <%= match.finished ? 'border-success' : 'border-secondary' %>">
+              <div class="card-header <%= match.finished ? 'bg-success' : 'bg-secondary' %> text-white d-flex justify-content-between align-items-center">
+                <span>Partido <%= index + 1 %></span>
+                <% if (match.finished) { %>
+                  <span class="badge bg-white text-success">Finalizado</span>
+                <% } else { %>
+                  <span class="badge bg-white text-primary">Pendiente</span>
+                <% } %>
+              </div>
+              <div class="card-body">
+                <!-- Logos y nombres -->
+                <div class="text-center mb-3">
+                  <div class="d-flex justify-content-center align-items-center gap-3">
+                    <div>
+                      <img src="<%= match.logo1 %>" alt="Logo local" width="40" height="40" style="object-fit: contain;">
+                      <div class="small mt-1"><%= match.homeTeam %></div>
+                    </div>
+                    <strong>vs</strong>
+                    <div>
+                      <img src="<%= match.logo2 %>" alt="Logo visitante" width="40" height="40" style="object-fit: contain;">
+                      <div class="small mt-1"><%= match.awayTeam %></div>
+                    </div>
+                  </div>
+                </div>
+        
+                <!-- Cuotas -->
+                <div class="d-flex justify-content-between mb-3">
+                  <span class="badge <%= match.finished && match.winner === '1' ? 'bg-success' : 'bg-secondary' %> badge-cuota">
+                    1: <%= match.odds["1"] %>
+                  </span>
+                  <span class="badge <%= match.finished && match.winner === 'X' ? 'bg-success' : 'bg-secondary' %> badge-cuota">
+                    X: <%= match.odds["X"] %>
+                  </span>
+                  <span class="badge <%= match.finished && match.winner === '2' ? 'bg-success' : 'bg-secondary' %> badge-cuota">
+                    2: <%= match.odds["2"] %>
+                  </span>
+                </div>
+        
+                <!-- Estado del partido -->
+                <% if (match.finished) { %>
+                  <div class="alert alert-success mb-0 p-2 text-center">
+                    <i class="bi bi-check-circle-fill me-2"></i> 
+                    <strong>Resultado:</strong> 
+                    <%= match.winner === '1' ? match.homeTeam : 
+                        match.winner === '2' ? match.awayTeam : 
+                        'Empate' %>
+                  </div>
+                <% } else { %>
+                  <div class="alert alert-secondary mb-0 p-2 text-center">
+                    <i class="bi bi-clock me-2"></i> Partido pendiente
+                  </div>
+                <% } %>
+              </div>
+            </div>
+          </div>
+          <% }; %>
+          <% }); %>
+        </div>
+        <!-- Botón de redirección -->
+        <div class="text-center mt-4">
+          <a href="/combinations" class="btn btn-success btn-lg">
+            <i class="bi bi-eye me-1"></i> Ver combinaciones del día
+          </a>
+        </div>
+      <% } %>
+      </div>
+    </div>
+  </div>
+  
+  <script src="/js/main.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
