@@ -20,16 +20,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-  const ua = req.headers['user-agent'];
+  const ua = req.headers['user-agent'] || '';
   const esMovil = /mobile|android|iphone|ipad|phone/i.test(ua);
-  if (esMovil) {
+  const esBot = /bot|facebookexternalhit|crawler|spider|twitterbot|whatsapp/i.test(ua.toLowerCase());
+  
+  if (esMovil || esBot) {
     next();
   } else {
     res.render("errores", {
       pageTitle: `${info.name_page} | Error`,
       description: info.desc,
       dominio: info.dominio,
-      errorMessage: "Solo disponible para dispositivos mobiles."
+      errorMessage: "Solo disponible para dispositivos móviles."
     });
   }
 });
