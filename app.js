@@ -19,12 +19,25 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.get('/logo', (req, res) => {
+  res.set('Content-Type', 'image/png');
+  res.sendFile(path.join(__dirname, '/public/img/logo.png'));
+});
+app.get('/banner', (req, res) => {
+  res.set('Content-Type', 'image/png');
+  res.sendFile(path.join(__dirname, '/public/img/banner.png'));
+});
+
 app.use((req, res, next) => {
   const ua = req.headers['user-agent'] || '';
-  const esMovil = /mobile|android|iphone|ipad|phone/i.test(ua);
-  const esBot = /bot|facebookexternalhit|crawler|spider|twitterbot|whatsapp/i.test(ua.toLowerCase());
+  const isImageRequest = req.path === '/logo' || req.path === '/banner';
   
-  if (esMovil || esBot) {
+  if (isImageRequest || /bot|facebook|whatsapp/i.test(ua.toLowerCase())) {
+    return next();
+  }
+
+  const esMovil = /mobile|android|iphone|ipad|phone/i.test(ua);
+  if (esMovil) {
     next();
   } else {
     res.render("errores", {
@@ -34,13 +47,6 @@ app.use((req, res, next) => {
       errorMessage: "Solo disponible para dispositivos móviles."
     });
   }
-});
-
-app.get('/logo', (req, res) => {
-  res.sendFile(path.join(__dirname, '/public/img/logo.png'));
-});
-app.get('/banner', (req, res) => {
-  res.sendFile(path.join(__dirname, '/public/img/banner.png'));
 });
 
 const indexRoute = require('./routes/index');
