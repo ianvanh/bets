@@ -66,5 +66,5 @@ app.use((req, res, next) => {
 });
 
 app.listen(port, () => {
-  console.log('Servidor iniciado en http://localhost:3000');
+  console.log(`🌐 Servidor encendido en el puerto ${port}`);
 });
