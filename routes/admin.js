@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
-
 const { info } = require('../config');
 const { getWeekKey, getMatchData, updateMatchResults } = require('../utils/helpers');
 const { loadData, saveData } = require('../utils/dataServices');
+const { syncToGithub } = require('../utils/remoteStorage');
 
+// Middleware de sesión
 router.use((req, res, next) => {
   if (req.session.authenticated) {
     next();
@@ -15,11 +14,12 @@ router.use((req, res, next) => {
   }
 });
 
+// Página principal admin
 router.get('/', (req, res) => {
-  updateMatchResults();
   res.render('admin');
 });
 
+// Guardar partidos nuevos
 router.post('/save-matches', async (req, res) => {
   try {
     const data = req.body;
@@ -62,6 +62,7 @@ router.post('/save-matches', async (req, res) => {
   }
 });
 
+// Vista previa de partido
 router.get('/preview-match', async (req, res) => {
   try {
     const eventId = req.query.id;
@@ -75,11 +76,33 @@ router.get('/preview-match', async (req, res) => {
   }
 });
 
+// Cerrar sesión
 router.post('/logout', (req, res) => {
   req.session.destroy(() => {
     res.redirect('/login');
   });
 });
 
+// Ruta para actualizar resultados manualmente
+router.post('/update-results', async (req, res) => {
+  try {
+    await updateMatchResults();
+    res.json({ success: true, message: 'Resultados actualizados correctamente' });
+  } catch (error) {
+    console.error('Error al actualizar resultados:', error);
+    res.status(500).json({ success: false, error: 'Error al actualizar los resultados' });
+  }
+});
+
+// Ruta para sincronizar con GitHub
+router.post('/sync-remote', async (req, res) => {
+  try {
+    const result = await syncToGithub();
+    res.json({ success: true, message: 'Archivo sincronizado con GitHub', result });
+  } catch (error) {
+    console.error('Error al sincronizar con GitHub:', error);
+    res.status(500).json({ success: false, error: 'Error al sincronizar con GitHub' });
+  }
+});
 
 module.exports = router;

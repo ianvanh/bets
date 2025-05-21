@@ -19,11 +19,15 @@ router.post('/', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-  res.render('login', {
-    pageTitle: `${info.name_page} | Login`,
-    description: info.desc,
-    dominio: info.dominio
-  });
+  if (req.session.authenticated) {
+    res.redirect('/admin')
+  } else {
+    res.render('login', {
+      pageTitle: `${info.name_page} | Login`,
+      description: info.desc,
+      dominio: info.dominio
+    });
+  }
 });
 
 module.exports = router;
