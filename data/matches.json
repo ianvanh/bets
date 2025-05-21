@@ -897,7 +897,12 @@
         "X": "3.35"
       },
       "eventId": "13523532",
-      "finished": false
+      "finished": true,
+      "result": {
+        "home": 1,
+        "away": 0
+      },
+      "winner": "1"
     }
   ]
 }
