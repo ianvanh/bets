@@ -797,7 +797,12 @@
         "X": "3.70"
       },
       "eventId": "12624383",
-      "finished": false
+      "finished": true,
+      "result": {
+        "home": 3,
+        "away": 2
+      },
+      "winner": "1"
     },
     {
       "match": "Al-Shabab vs Al-Ittihad",
@@ -812,7 +817,12 @@
         "X": "4.00"
       },
       "eventId": "12624373",
-      "finished": false
+      "finished": true,
+      "result": {
+        "home": 2,
+        "away": 3
+      },
+      "winner": "2"
     },
     {
       "match": "Crystal Palace vs Wolverhampton",
@@ -827,7 +837,12 @@
         "X": "3.40"
       },
       "eventId": "12436592",
-      "finished": false
+      "finished": true,
+      "result": {
+        "home": 4,
+        "away": 2
+      },
+      "winner": "1"
     }
   ]
 }
