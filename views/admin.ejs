@@ -153,14 +153,21 @@
           const data = await response.json();
 
           if (data.homeBadge) {
-            document.getElementById(`preview-logo${matchIndex}-1`).src = data.homeBadge;
+            const img1 = document.getElementById(`preview-logo${matchIndex}-1`);
+            img1.src = data.homeBadge;
+            img1.style.display = 'inline-block';
           }
+
           if (data.awayBadge) {
-            document.getElementById(`preview-logo${matchIndex}-2`).src = data.awayBadge;
+            const img2 = document.getElementById(`preview-logo${matchIndex}-2`);
+            img2.src = data.awayBadge;
+            img2.style.display = 'inline-block';
           }
+
           if (data.homeName) {
             document.getElementById(`preview-name${matchIndex}-1`).innerText = data.homeName;
           }
+
           if (data.awayName) {
             document.getElementById(`preview-name${matchIndex}-2`).innerText = data.awayName;
           }
