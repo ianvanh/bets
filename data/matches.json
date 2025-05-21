@@ -857,7 +857,12 @@
         "X": "3.10"
       },
       "eventId": "13727437",
-      "finished": false
+      "finished": true,
+      "result": {
+        "home": 1,
+        "away": 0
+      },
+      "winner": "1"
     },
     {
       "match": "Metz vs Stade de Reims",
@@ -872,7 +877,12 @@
         "X": "3.40"
       },
       "eventId": "13879832",
-      "finished": false
+      "finished": true,
+      "result": {
+        "home": 1,
+        "away": 1
+      },
+      "winner": "X"
     },
     {
       "match": "Tottenham Hotspur vs Manchester United",
