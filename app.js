@@ -19,15 +19,6 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get('/logo', (req, res) => {
-  res.set('Content-Type', 'image/png');
-  res.sendFile(path.join(__dirname, '/public/img/logo.png'));
-});
-app.get('/banner', (req, res) => {
-  res.set('Content-Type', 'image/png');
-  res.sendFile(path.join(__dirname, '/public/img/banner.png'));
-});
-
 app.use((req, res, next) => {
   const ua = req.headers['user-agent'] || '';
   const isImageRequest = req.path === '/logo' || req.path === '/banner';
